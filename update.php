@@ -7,13 +7,13 @@ try {
 	include('db_init.php');
 
 	$sql = "UPDATE `recipe`
-          SET `name` = :name, `instructions` = :instruct, `fav` = :fav
+          SET `name` = :name, `link` = :link, `fav` = :fav
           WHERE `id` = :id";
 	// bind the params
 	$statement = $db->prepare( $sql );
 	$statement->bindParam( ':id', $_POST['id'] );
 	$statement->bindParam( ':name', $_POST['name'] );
-  $statement->bindParam( ':instruct', $_POST['instructions'] );
+  $statement->bindParam( ':link', $_POST['link'] );
   $statement->bindParam( ':fav', $_POST['fav'] );
 	// execute that statement
 	$statement->execute();

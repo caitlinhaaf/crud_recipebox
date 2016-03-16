@@ -39,8 +39,8 @@
           <form>
             <h3>Edit Recipe</h3>
             <!-- recipe name -->
-            <label for="recipeName">Name:</label>
-            <input id="recipeName" type="text" name="recipeName" value="">
+            <label for="editName">Name:</label>
+            <input id="editName" type="text" name="editName" value="">
 
             <!-- recipe instructions/notes -->
             <label for="editLink">Link:</label>
@@ -173,6 +173,7 @@
               // console.log("recipe listed");
               var recipe = document.createElement('li');
               recipe.setAttribute('data-id',xhr.data[i].id);
+              recipe.setAttribute('link',xhr.data[i].link);
 
               if(xhr.data[i].fav){
                 // console.log("fav!");
@@ -289,38 +290,61 @@
 
       // ON CLICK, PRE-POPULATE POP UP UPDATE FORM
       // pass in variables from li (id, name, instructions)
+
+      var activeID;
+
       function openPopUp(){
         // console.log("gear");
         var pid = $(this).parent().attr('data-id');
         var name = $(this).parent().text();
-        
-        var link = $(this).parent().attr('href');
-        console.log(link);
+
+        var link = $(this).parent().attr('link');
+        // console.log(pid, name, link);
 
         // grab form input fields, set values
-        $('#recipeName').val(name);
+        $('#editName').val(name);
         $('#editLink').val(link);
-
         // if class of favourite, checkbox value = 1
         if( $(this).parent().attr('data-icon')=='heart' ){
           $('#favChk').prop('checked', true);
-          console.log("its a fav");
+          // console.log("its a fav");
         }else{
           $('#favChk').prop('checked', false);
-          console.log("its NOT a fav");
+          // console.log("its NOT a fav");
         }
+        // console.log( $('#favChk').prop('checked') );
+        activeID = pid;
+        // console.log(activeID);
+        return activeID;
       }
-
 
       // UPDATE RECIPE
       $( '#updateRecipe').on('click', function(){
+        var favVal;
+        if( $('#favChk').prop('checked')==true ){
+          // console.log("it's  fav!");
+          favVal=1;
+        }else{
+          // console.log("it's not a fav");
+          favVal=0;
+        }
         $.ajax({
           type:'POST',
           url:'update.php',
           data: {
-
+            id: activeID,
+            name: $("#editName").val(),
+            link: $("#editLink").val(),
+            fav: favVal
           },
-          datatype: 'json'
+          datatype: 'json',
+          success: function(jsonStr){
+            // $("#result").text(JSON.stringify(jsonStr));
+            console.log("recipe updated!");
+            // alert();
+            // addmenu('home');
+            // addRecipes();
+          }
         })
       });
 
