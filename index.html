@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Recipe Box Application</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+    <!-- JQUERY MOBILE -->
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+    <script src='//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js'></script>
+    <!-- <link rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css'> -->
+
+    <link rel="stylesheet" href="themes/recipeBoxTest.min.css" />
+  	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+  	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+    <link rel="stylesheet" href="_style/style.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- PERSONAL CSS SHEET -->
+    <link rel="stylesheet" href="_style/style.css" media="screen" title="" charset="utf-8">
+  </head>
+  <body>
+
+    <!-- PAGES -->
+    <!-- home - my recipes -->
+    <div data-role="page" id='home'>
+      <div data-role="header" data-position='fixed' class='header'>
+        <h1>My Recipes</h1>
+      </div>
+      <ul data-role='listview'
+        data-split-icon="gear"
+        data-theme-'a'
+        data-split-theme='b'
+        data-filter="true"
+        data-filter-placeholder="Search..."
+        id="recipeList"></ul>
+
+        <!-- edit/delete recipe pop up -->
+        <div id='editRecipe' data-role='popup' class='ui-content' class='ui-corner-all'>
+          <!-- fill form with recipe data from each li -->
+          <!-- run update.php on form submission -->
+          <!-- run delete.php when delet btn hit -->
+          <form>
+            <h3>Edit Recipe</h3>
+            <!-- recipe name -->
+            <label for="recipeName">Name:</label>
+            <input id="recipeName" type="text" name="recipeName" value="">
+
+            <!-- recipe instructions/notes -->
+            <label for="instructions">Instructions:</label>
+            <input id="recipeText" type="text" name="instructions" value="">
+            <!-- favourite checkbox -->
+            <label for="fav">Mark As Favourite:</label>
+            <input type="checkbox" name="fav" value="">
+            <!-- submit changes-->
+            <button name="button" id='updateRecipe'>Update</button>
+
+            <button name="button" id='deleteRecipe'>Delete Recipe</button>
+          </form>
+        </div>
+
+    </div>
+
+    <!-- my favourites -->
+    <div data-role="page" id='favs'>
+      <div data-role="header" data-position='fixed' class='header'>
+        <h1>My Favorites</h1>
+      </div>
+      <ul data-role='listview'
+        data-split-icon="gear"
+        data-theme-'a'
+        data-split-theme='b'
+        data-filter="true"
+        data-filter-placeholder="Search..."
+        id="favList"></ul>
+    </div>
+
+    <!-- add new recipe -->
+    <div data-role="page" id='addRecipe'>
+      <div data-role="header" data-position='fixed' class='header'>
+        <h1>Add a Recipe</h1>
+      </div>
+      <div data-role='pgBody'>
+        <form class="addNew"
+              id="addNew"
+              method="post">
+          <!-- add recipe name -->
+          <label for="addName">Name:</label>
+          <input type="text" name="addName" id="addName" value="">
+          <!-- if i want the ingredients to be a dynamic list, will i need to have this as a separate form? -->
+
+          <!-- add ing measure -->
+          <!-- add ing names-->
+          <!-- have a button - click to add ing to a li
+          asyncronously add ings. to list; submitting whole form, all these li's are grabbed in array, entered separately???-->
+
+          <!-- add recipe notes -->
+          <label for="instruct">Instructions:</label>
+          <input type="text" name="instruct" value="">
+          <!-- button -->
+          <button id="submitNew" type="submit" name="submitNew">Add Recipe</button>
+        </form>
+
+      <div>
+    </div>
+
+    <script type="text/javascript">
+
+    // $(document).ready(function(){
+
+      // FOOTER/NAV BAR
+      // dynaimcally add footer/nav to each page
+      function addmenu(page){
+        // access the page by id
+        var page = document.querySelector('#'+page);
+        // if the selected element is not desingated as a footer, add a footer
+        if(!page.querySelector('div[data-role-footer]')){
+          //create footer
+          var foot = document.createElement('div');
+  				foot.setAttribute( 'data-role', 'footer' );
+  				foot.setAttribute( 'data-position', 'fixed' );
+  				var nav = document.createElement('div');
+  				nav.setAttribute( 'data-role', 'navbar' );
+
+          // create list of links (pages)
+  				var ul = document.createElement( 'ul' );
+          //home - my recipes
+  				var li1 = document.createElement( 'li' );
+  				var a = document.createElement( 'a' );
+  				a.textContent = 'My Recipes';
+  				a.setAttribute( 'href', '#home' );
+  				a.setAttribute( 'data-icon', 'bullets' );
+  				li1.appendChild( a );
+          // favourites
+          var li2 = document.createElement( 'li' );
+  				var a = document.createElement( 'a' );
+  				a.textContent = 'My Favourites';
+  				a.setAttribute( 'href', '#favs' );
+  				a.setAttribute( 'data-icon', 'heart' );
+  				li2.appendChild( a );
+          //add recipe
+          var li3 = document.createElement( 'li' );
+  				var a = document.createElement( 'a' );
+  				a.textContent = 'Add a Recipe';
+  				a.setAttribute( 'href', '#addRecipe' );
+  				a.setAttribute( 'data-icon', 'plus' );
+  				li3.appendChild( a );
+          // append links list-items to list
+  				ul.appendChild( li1 );
+  				ul.appendChild( li2 );
+  				ul.appendChild( li3 );
+          // append list to nav to foot
+  				nav.appendChild( ul );
+  				foot.appendChild( nav );
+  				page.appendChild( foot );
+          // trigger navbar initialization
+  				jQuery(nav).navbar();
+  				// trigger proper page creation for footer placement
+  				jQuery(page).trigger('create');
+        }
+      }
+
+      // for each page, on page show -> add nav bar/header, read.php
+      // RECIPES HOME PAGE
+      $( '#home' ).on( 'pageshow', function(){
+  			addmenu('home');
+        addRecipes();
+  		});
+
+      function addRecipes(){
+        $.ajax({
+          'url':'read.php',
+          'dataType':'json'
+        }).done(function( xhr ){
+          if(xhr.message == 'success'){
+            // console.log("success!");
+            $('#recipeList').html('');
+            for (var i=0; i < xhr.data.length; i++){
+              // console.log("recipe listed");
+              var recipe = document.createElement('li');
+              recipe.setAttribute('data-id',xhr.data[i].id);
+              recipe.setAttribute('data-icon', 'gear');
+              if(xhr.data[i].fav){
+                // console.log("fav!");
+                recipe.setAttribute('class','fav');
+              }
+              var a = document.createElement('a');
+              a.textContent = xhr.data[i].name;
+              recipe.appendChild(a);
+
+              //access all recipe notes
+              //set as p (wrapInner) within recipe
+
+              var aPop = document.createElement('a');
+              aPop.setAttribute('href','#editRecipe');
+              aPop.setAttribute('class','gearEdit');
+              aPop.setAttribute('data-rel','popup');
+              aPop.setAttribute('data-position-to','window');
+              aPop.addEventListener('click', openPopUp)
+
+              recipe.appendChild(aPop);
+
+              $("#recipeList").append(recipe);
+            }
+            //list refresh
+            $("#recipeList").listview('refresh');
+          }
+        }
+        ).fail(function(){
+          console.log("Sorry!");
+        })
+      }
+
+
+      // FAVOURITE RECIPES PAGE
+      $( '#favs' ).on( 'pageshow', function(){
+  			addmenu('favs');
+        //same as above, but only where favourite = 'true' in db
+        $.ajax({
+          'url':'read.php',
+          'dataType':'json'
+        }).done(function( xhr ){
+          if(xhr.message == 'success'){
+            // console.log("success!");
+            $('#favList').html('');
+            for (var i=0; i < xhr.data.length; i++){
+              if(xhr.data[i].fav){
+                // console.log("fav!");
+                var recipe = document.createElement('li');
+                recipe.textContent = xhr.data[i].name;
+                recipe.setAttribute('data-id',xhr.data[i].id);
+                recipe.setAttribute('class','fav');
+                recipe.setAttribute( 'data-icon', 'heart' );
+                $("#favList").append(recipe);
+              }
+            }
+            $(".fav").wrapInner("<a href=''></a>");
+            $("#favList").listview('refresh');
+          }
+        }
+        ).fail(function(){
+          console.log("Sorry!");
+        })
+  		});
+
+
+      // ADD RECIPE PAGE
+      $( '#addRecipe' ).on( 'pageshow', function(){
+  			addmenu('addRecipe');
+  		});
+
+      // SUBMIT/ADD RECIPE
+      var request;
+      //place action on form -> when submit
+      $('#addNew').submit(function(evt){
+        // console.log("working");
+        //abort any active requests
+        if(request){
+          request.abort();
+        }
+        // define values of form/inputs
+        var $form = $(this);
+        // var $inputs = $form.find("name, ");
+        $.ajax({
+          type:'POST',
+          url: 'addRecipe.php',
+          data: {
+            //put variables here for json
+            name: $("#addName").val()
+          },
+          datatype: 'json',
+          success: function(jsonStr){
+            // $("#result").text(JSON.stringify(jsonStr));
+
+            console.log("recipe added!");
+            // alert();
+            addmenu('home');
+            addRecipes();
+          }
+        });
+      });
+
+
+
+      // ON CLICK, PRE-POPULATE POP UP UPDATE FORM
+      // pass in variables from li (id, name, instructions)
+      function openPopUp(){
+        // console.log("gear");
+        var pid = $(this).parent().attr('data-id');
+        var name = $(this).parent().text();
+        // var instruct = 
+        console.log(pid, name);
+
+        // grab form input fields, set values
+        $('#recipeName').val(name);
+        // $('#recipeText');
+      }
+
+
+      // UPDATE RECIPE
+      $( '#updateRecipe').on('click', function(){
+        $.ajax({
+          type:'POST',
+          url:'update.php',
+          data: {
+
+          },
+          datatype: 'json'
+        })
+      });
+
+
+      // DELETE RECIPE
+      //get the id of the parent li
+
+    // });
+    </script>
+
+  </body>
+</html>

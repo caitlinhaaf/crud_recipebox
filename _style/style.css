@@ -1,0 +1,28 @@
+*{
+  text-shadow: none;
+}
+
+.header{
+  background: pink;
+}
+
+h1{
+  color: white;
+
+}
+
+form{
+  margin: 30px;
+}
+
+.ui-popup-container{
+  min-width: 500px;
+}
+
+ .ui-checkbox{
+  display: inline;
+}
+
+.ui-mobile label, .ui-controlgroup-label{
+  display: inline;
+}
