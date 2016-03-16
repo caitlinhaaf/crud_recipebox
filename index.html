@@ -278,12 +278,15 @@
           datatype: 'json',
           success: function(jsonStr){
             // $("#result").text(JSON.stringify(jsonStr));
-
-            console.log("recipe added!");
             // alert();
-            addmenu('home');
-            addRecipes();
+            // $.mobile.changePage("#addRecipe");
+            // $("#recipeList").listview('refresh');
           }
+        }).done(function(){
+          $('#addName').val("");
+          $('#addLink').val("");
+          $.mobile.changePage("#home");
+          // $("#recipeList").listview('refresh');
         });
       });
 
@@ -318,6 +321,7 @@
         return activeID;
       }
 
+
       // UPDATE RECIPE
       $( '#updateRecipe').on('click', function(){
         var favVal;
@@ -340,19 +344,38 @@
           datatype: 'json',
           success: function(jsonStr){
             // $("#result").text(JSON.stringify(jsonStr));
-            console.log("recipe updated!");
+            // console.log("recipe updated!");
             // alert();
             // addmenu('home');
             // addRecipes();
           }
+        }).done(function(){
+          addmenu('home');
+          addRecipes();
+          // $.mobile.changePage("#home");
         })
       });
 
 
       // DELETE RECIPE
       //get the id of the parent li
+      $('#deleteRecipe').on('click', function(){
+        $.ajax({
+          type:'POST',
+          url:'delete.php',
+          data: {
+            id: activeID
+          },
+          datatype: 'json',
+          success: function(jsonStr){
+            // console.log("recipe deleted");
+          }
+        }).done(function(){
+          // addRecipes();
+          $.mobile.changePage("#home");
+        });
+      });
 
-    // });
     </script>
 
   </body>
