@@ -7,7 +7,7 @@ try {
   // select recipe (name, id, fav)
   // select associated ingredients (iid, name, measurements)
   //select associated notes
-	$sql = "SELECT `id`,`name`,`fav` FROM `recipe`
+	$sql = "SELECT `id`,`name`,`link`,`fav` FROM `recipe`
 					ORDER BY `name` ASC";
 	// execute that statement
 	$query = $db->prepare( $sql );

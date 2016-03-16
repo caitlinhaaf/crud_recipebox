@@ -9,6 +9,7 @@ try{
 	$sql = "CREATE TABLE IF NOT EXISTS `recipe`(
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
+    `instructions` VARCHAR(255) NOT NULL,
     `fav` BOOLEAN,
     PRIMARY KEY(`id`)
   ) ENGINE = InnoDB;";
@@ -25,10 +26,12 @@ try{
 try{
 
 // insert statement
-$sql = "INSERT INTO `recipe` (`name`) VALUES (:name);";
+$sql = "INSERT INTO `recipe` (`name`, `link`)
+        VALUES (:name, :link);";
 
 $statement = $db->prepare( $sql );
 $statement->bindParam( ':name', $_POST['name'] );
+$statement->bindParam( ':link', $_POST['link'] );
 $statement->execute();
 
 // as long as evertying is okay...

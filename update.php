@@ -6,22 +6,17 @@ try {
 	// include database setup
 	include('db_init.php');
 
-	// enter the submitted data into the database
-
-  //pass in li id somehow
-  // update name/instructions
-  //update ingredients
-
 	$sql = "UPDATE `recipe`
-          SET `name` = :name
+          SET `name` = :name, `instructions` = :instruct, `fav` = :fav
           WHERE `id` = :id";
 	// bind the params
 	$statement = $db->prepare( $sql );
 	$statement->bindParam( ':id', $_POST['id'] );
 	$statement->bindParam( ':name', $_POST['name'] );
+  $statement->bindParam( ':instruct', $_POST['instructions'] );
+  $statement->bindParam( ':fav', $_POST['fav'] );
 	// execute that statement
 	$statement->execute();
-
 
 	// as long as evertying is okay...
 	// output
@@ -32,12 +27,6 @@ try {
 	$retval['data'] = $err->getMessage();
 }
 
-// echo json_encode( $retval );
-
-
-
-
-
-
+echo json_encode( $retval );
 
  ?>

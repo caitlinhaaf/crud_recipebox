@@ -36,9 +36,6 @@
 
         <!-- edit/delete recipe pop up -->
         <div id='editRecipe' data-role='popup' class='ui-content' class='ui-corner-all'>
-          <!-- fill form with recipe data from each li -->
-          <!-- run update.php on form submission -->
-          <!-- run delete.php when delet btn hit -->
           <form>
             <h3>Edit Recipe</h3>
             <!-- recipe name -->
@@ -46,11 +43,13 @@
             <input id="recipeName" type="text" name="recipeName" value="">
 
             <!-- recipe instructions/notes -->
-            <label for="instructions">Instructions:</label>
-            <input id="recipeText" type="text" name="instructions" value="">
+            <label for="editLink">Link:</label>
+            <input id="editLink" type="text" name="editLink" value="">
+
             <!-- favourite checkbox -->
-            <label for="fav">Mark As Favourite:</label>
-            <input type="checkbox" name="fav" value="">
+            <label for="favCheck">Mark As Favourite:</label>
+            <input type="checkbox" name="favCheck" id="favChk" value="">
+
             <!-- submit changes-->
             <button name="button" id='updateRecipe'>Update</button>
 
@@ -86,18 +85,11 @@
           <!-- add recipe name -->
           <label for="addName">Name:</label>
           <input type="text" name="addName" id="addName" value="">
-          <!-- if i want the ingredients to be a dynamic list, will i need to have this as a separate form? -->
-
-          <!-- add ing measure -->
-          <!-- add ing names-->
-          <!-- have a button - click to add ing to a li
-          asyncronously add ings. to list; submitting whole form, all these li's are grabbed in array, entered separately???-->
-
           <!-- add recipe notes -->
-          <label for="instruct">Instructions:</label>
-          <input type="text" name="instruct" value="">
+          <label for="addLink">Recipe Link:</label>
+          <input type="text" id="addLink" name="addLink" value="">
           <!-- button -->
-          <button id="submitNew" type="submit" name="submitNew">Add Recipe</button>
+          <button id="submitNew" name="submitNew">Add Recipe</button>
         </form>
 
       <div>
@@ -107,7 +99,7 @@
 
     // $(document).ready(function(){
 
-      // FOOTER/NAV BAR
+      // FOOTER/NAV BAR FUNCTION
       // dynaimcally add footer/nav to each page
       function addmenu(page){
         // access the page by id
@@ -160,7 +152,10 @@
       }
 
       // for each page, on page show -> add nav bar/header, read.php
+
+      // ----------------------
       // RECIPES HOME PAGE
+      // ----------------------
       $( '#home' ).on( 'pageshow', function(){
   			addmenu('home');
         addRecipes();
@@ -178,17 +173,23 @@
               // console.log("recipe listed");
               var recipe = document.createElement('li');
               recipe.setAttribute('data-id',xhr.data[i].id);
-              recipe.setAttribute('data-icon', 'gear');
+
               if(xhr.data[i].fav){
                 // console.log("fav!");
                 recipe.setAttribute('class','fav');
+                recipe.setAttribute('data-icon', 'heart');
+              }else{
+                recipe.setAttribute('data-icon', 'gear');
               }
               var a = document.createElement('a');
               a.textContent = xhr.data[i].name;
+              a.setAttribute('href',xhr.data[i].link);
+              // console.log(xhr.data[i].link);
               recipe.appendChild(a);
 
-              //access all recipe notes
-              //set as p (wrapInner) within recipe
+              //access all recipe instructions
+              // set as li under recipe li (collapsible)
+              // var instructions = xhr.data[i].instructions;
 
               var aPop = document.createElement('a');
               aPop.setAttribute('href','#editRecipe');
@@ -210,8 +211,9 @@
         })
       }
 
-
+      // ----------------------
       // FAVOURITE RECIPES PAGE
+      // ----------------------
       $( '#favs' ).on( 'pageshow', function(){
   			addmenu('favs');
         //same as above, but only where favourite = 'true' in db
@@ -228,6 +230,10 @@
                 var recipe = document.createElement('li');
                 recipe.textContent = xhr.data[i].name;
                 recipe.setAttribute('data-id',xhr.data[i].id);
+
+                recipe.setAttribute('href',xhr.data[i].link);
+                // console.log(xhr.data[i].link);
+
                 recipe.setAttribute('class','fav');
                 recipe.setAttribute( 'data-icon', 'heart' );
                 $("#favList").append(recipe);
@@ -242,16 +248,17 @@
         })
   		});
 
-
+      // ----------------------
       // ADD RECIPE PAGE
+      // ----------------------
       $( '#addRecipe' ).on( 'pageshow', function(){
   			addmenu('addRecipe');
   		});
 
-      // SUBMIT/ADD RECIPE
+      // SUBMIT/ADD RECIPE FUNCTION
       var request;
       //place action on form -> when submit
-      $('#addNew').submit(function(evt){
+      $('#submitNew').on('click', function(evt){
         // console.log("working");
         //abort any active requests
         if(request){
@@ -259,13 +266,13 @@
         }
         // define values of form/inputs
         var $form = $(this);
-        // var $inputs = $form.find("name, ");
         $.ajax({
           type:'POST',
           url: 'addRecipe.php',
           data: {
             //put variables here for json
-            name: $("#addName").val()
+            name: $("#addName").val(),
+            link: $("#addLink").val()
           },
           datatype: 'json',
           success: function(jsonStr){
@@ -280,19 +287,28 @@
       });
 
 
-
       // ON CLICK, PRE-POPULATE POP UP UPDATE FORM
       // pass in variables from li (id, name, instructions)
       function openPopUp(){
         // console.log("gear");
         var pid = $(this).parent().attr('data-id');
         var name = $(this).parent().text();
-        // var instruct = 
-        console.log(pid, name);
+        
+        var link = $(this).parent().attr('href');
+        console.log(link);
 
         // grab form input fields, set values
         $('#recipeName').val(name);
-        // $('#recipeText');
+        $('#editLink').val(link);
+
+        // if class of favourite, checkbox value = 1
+        if( $(this).parent().attr('data-icon')=='heart' ){
+          $('#favChk').prop('checked', true);
+          console.log("its a fav");
+        }else{
+          $('#favChk').prop('checked', false);
+          console.log("its NOT a fav");
+        }
       }
 
 
