@@ -17,6 +17,13 @@
 
     <!-- PERSONAL CSS SHEET -->
     <link rel="stylesheet" href="_style/style.css" media="screen" title="" charset="utf-8">
+
+    <style media="screen">
+      .intro{
+        display: block;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
 
@@ -26,6 +33,10 @@
       <div data-role="header" data-position='fixed' class='header'>
         <h1>My Recipes</h1>
       </div>
+      <p class='intro'>
+        Click the links below to view recipes.
+      </p>
+
       <ul data-role='listview'
         data-split-icon="gear"
         data-theme-'a'
@@ -64,6 +75,9 @@
       <div data-role="header" data-position='fixed' class='header'>
         <h1>My Favorites</h1>
       </div>
+      <p class='intro'>
+        Click the links below to view recipes.
+      </p>
       <ul data-role='listview'
         data-split-icon="gear"
         data-theme-'a'
@@ -91,8 +105,19 @@
           <!-- button -->
           <button id="submitNew" name="submitNew">Add Recipe</button>
         </form>
+      </div>
+    </div>
 
-      <div>
+    <div data-role="page" id='updateSuccess'>
+      <div data-role="header" data-position='fixed' class='header'>
+        <h1>Success!</h1>
+      </div>
+      <div data-role='pgBody'>
+        <p class='intro'>
+          You've successfully updated/deleted your recipe!
+        </p>
+        <button id="backBtn" type="button" name="button">Back to My Recipes</button>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -259,7 +284,9 @@
       // SUBMIT/ADD RECIPE FUNCTION
       var request;
       //place action on form -> when submit
-      $('#submitNew').on('click', function(evt){
+      $('#submitNew').on('click', newRecipe);
+
+      function newRecipe(evt){
         // console.log("working");
         //abort any active requests
         if(request){
@@ -285,17 +312,14 @@
         }).done(function(){
           $('#addName').val("");
           $('#addLink').val("");
-          $.mobile.changePage("#home");
+          $.mobile.changePage('#home',{transition:'slide'});
           // $("#recipeList").listview('refresh');
         });
-      });
+      };
 
 
       // ON CLICK, PRE-POPULATE POP UP UPDATE FORM
       // pass in variables from li (id, name, instructions)
-
-      var activeID;
-
       function openPopUp(){
         // console.log("gear");
         var pid = $(this).parent().attr('data-id');
@@ -315,11 +339,22 @@
           $('#favChk').prop('checked', false);
           // console.log("its NOT a fav");
         }
-        // console.log( $('#favChk').prop('checked') );
-        activeID = pid;
-        // console.log(activeID);
-        return activeID;
+        $('#editRecipe').attr('active', pid);
+        console.log( $('#editRecipe').attr('active')  );
       }
+
+      // -----------------------
+      // SUCCESSFUL UPDATE PAGE
+      // -----------------------
+      $( '#updateSuccess' ).on( 'pageshow', function(){
+  			addmenu('updateSuccess');
+        // addRecipes();
+  		});
+
+      $('#backBtn').on('click', function(){
+        console.log('go back');
+        $.mobile.changePage('#home',{transition:'slide'});
+      });
 
 
       // UPDATE RECIPE
@@ -336,7 +371,7 @@
           type:'POST',
           url:'update.php',
           data: {
-            id: activeID,
+            id: $('#editRecipe').attr('active'),
             name: $("#editName").val(),
             link: $("#editLink").val(),
             fav: favVal
@@ -350,9 +385,10 @@
             // addRecipes();
           }
         }).done(function(){
-          addmenu('home');
-          addRecipes();
-          // $.mobile.changePage("#home");
+          // addmenu('home');
+          // addRecipes();
+          $.mobile.changePage('#updateSuccess', {transition:'slide'});
+          // $("#favList").listview('refresh');
         })
       });
 
@@ -364,7 +400,7 @@
           type:'POST',
           url:'delete.php',
           data: {
-            id: activeID
+            id: $('#editRecipe').attr('active')
           },
           datatype: 'json',
           success: function(jsonStr){
@@ -372,7 +408,8 @@
           }
         }).done(function(){
           // addRecipes();
-          $.mobile.changePage("#home");
+          $.mobile.changePage('#updateSuccess', {transition:'slide'});
+          // $("#favList").listview('refresh');
         });
       });
 
