@@ -2,17 +2,13 @@
   text-shadow: none;
 }
 
-.header{
-  background: pink;
-}
-
-h1{
-  color: white;
-
-}
-
 form{
   margin: 30px;
+}
+
+#submitNew, #backBtn{
+  width: 200px;
+  margin: 40px auto;
 }
 
 .ui-popup-container{

@@ -10,8 +10,8 @@
     <script src='//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js'></script>
     <!-- <link rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css'> -->
 
-    <link rel="stylesheet" href="themes/recipeBoxTest.min.css" />
-  	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="_style/themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="_style/themes/recipeboxTheme.min.css" />
   	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
     <link rel="stylesheet" href="_style/style.css" media="screen" title="no title" charset="utf-8">
 
@@ -39,10 +39,10 @@
 
       <ul data-role='listview'
         data-split-icon="gear"
-        data-theme-'a'
+        data-theme='b'
         data-split-theme='b'
         data-filter="true"
-        data-filter-placeholder="Search..."
+        data-filter-placeholder="Search recipe box..."
         id="recipeList"></ul>
 
         <!-- edit/delete recipe pop up -->
@@ -98,10 +98,10 @@
               method="post">
           <!-- add recipe name -->
           <label for="addName">Name:</label>
-          <input type="text" name="addName" id="addName" value="">
+          <input type="text" name="addName" id="addName" data-theme='a' value="">
           <!-- add recipe notes -->
           <label for="addLink">Recipe Link:</label>
-          <input type="text" id="addLink" name="addLink" value="">
+          <input type="text" id="addLink" data-theme='a' name="addLink" value="">
           <!-- button -->
           <button id="submitNew" name="submitNew">Add Recipe</button>
         </form>
