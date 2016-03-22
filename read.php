@@ -2,6 +2,16 @@
 try {
 	// include database setup
 	include('db_init.php');
+	$sql = "CREATE TABLE IF NOT EXISTS `recipe`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `instructions` VARCHAR(255) NOT NULL,
+    `fav` BOOLEAN,
+    PRIMARY KEY(`id`)
+  ) ENGINE = InnoDB;";
+	// execute that statement
+	$statement= $db->prepare( $sql );
+  $statement->execute();
 
 	// enter the submitted data into the database
   // select recipe (name, id, fav)
