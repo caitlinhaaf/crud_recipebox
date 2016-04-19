@@ -2,6 +2,23 @@
   text-shadow: none;
 }
 
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  /*min-height: auto;*/
+}
+
+/*body{
+  background-color: none;
+  background: url(_imgaes/producepattern-full.jpg);
+	background-repeat:no-repeat;
+	background-position:center center;
+	background-attachment:scroll;
+	background-size: contain;
+}*/
+
 form{
   margin: 30px;
 }
@@ -35,4 +52,9 @@ form{
 }
 :-ms-input-placeholder {
    color: white;
+}
+
+
+.ui-page-theme-a{
+  background: none;
 }
