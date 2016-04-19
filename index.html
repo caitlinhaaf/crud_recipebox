@@ -80,10 +80,10 @@
       </p>
       <ul data-role='listview'
         data-split-icon="gear"
-        data-theme-'a'
+        data-theme='b'
         data-split-theme='b'
         data-filter="true"
-        data-filter-placeholder="Search..."
+        data-filter-placeholder="Search favourites..."
         id="favList"></ul>
     </div>
 
@@ -210,6 +210,7 @@
               var a = document.createElement('a');
               a.textContent = xhr.data[i].name;
               a.setAttribute('href',xhr.data[i].link);
+              a.setAttribute('target', '_blank');
               // console.log(xhr.data[i].link);
               recipe.appendChild(a);
 
@@ -254,18 +255,34 @@
               if(xhr.data[i].fav){
                 // console.log("fav!");
                 var recipe = document.createElement('li');
-                recipe.textContent = xhr.data[i].name;
                 recipe.setAttribute('data-id',xhr.data[i].id);
 
-                recipe.setAttribute('href',xhr.data[i].link);
-                // console.log(xhr.data[i].link);
+                recipe.setAttribute('link',xhr.data[i].link);
 
                 recipe.setAttribute('class','fav');
                 recipe.setAttribute( 'data-icon', 'heart' );
+
+                var a = document.createElement('a');
+                a.textContent = xhr.data[i].name;
+                a.setAttribute('href',xhr.data[i].link);
+                a.setAttribute('target', '_blank');
+                // console.log(xhr.data[i].link);
+                recipe.appendChild(a);
+
+                var aPop = document.createElement('a');
+                //perhaps add an edit function/window to the favourites page later?
+                // aPop.setAttribute('href','#editRecipe');
+                aPop.setAttribute('class','gearEdit');
+                // aPop.setAttribute('data-rel','popup');
+                aPop.setAttribute('data-position-to','window');
+                // aPop.addEventListener('click', openPopUp)
+
+                recipe.appendChild(aPop);
+
                 $("#favList").append(recipe);
               }
             }
-            $(".fav").wrapInner("<a href=''></a>");
+            // $(".fav").wrapInner("<a href=''></a>");
             $("#favList").listview('refresh');
           }
         }

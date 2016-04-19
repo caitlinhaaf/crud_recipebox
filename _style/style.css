@@ -22,3 +22,17 @@ form{
 .ui-mobile label, .ui-controlgroup-label{
   display: inline;
 }
+
+
+::-webkit-input-placeholder {
+   color: white;
+}
+:-moz-placeholder { /* Firefox 18- */
+   color: white;
+}
+::-moz-placeholder {  /* Firefox 19+ */
+   color: white;
+}
+:-ms-input-placeholder {
+   color: white;
+}
