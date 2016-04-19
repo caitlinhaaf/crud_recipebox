@@ -26,12 +26,13 @@ try{
 try{
 
 // insert statement
-$sql = "INSERT INTO `recipe` (`name`, `link`)
-        VALUES (:name, :link);";
+$sql = "INSERT INTO `recipe` (`name`, `link`, `fav`)
+        VALUES (:name, :link, :fav);";
 
 $statement = $db->prepare( $sql );
 $statement->bindParam( ':name', $_POST['name'] );
 $statement->bindParam( ':link', $_POST['link'] );
+$statement->bindParam( ':fav', $_POST['fav'] );
 $statement->execute();
 
 // as long as evertying is okay...

@@ -1,5 +1,6 @@
 *{
   text-shadow: none;
+  color: white;
 }
 
 #bg {
@@ -38,6 +39,14 @@ form{
 
 .ui-mobile label, .ui-controlgroup-label{
   display: inline;
+}
+
+.marginBox{
+  margin-top: 30px;
+}
+
+#editRecipe{
+  background-color: #b32373;
 }
 
 

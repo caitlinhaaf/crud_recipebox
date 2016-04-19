@@ -34,7 +34,7 @@
         <h1>My Recipes</h1>
       </div>
       <p class='intro'>
-        Click the links below to view recipes.
+        Click to view each recipe, or click the icon on the right to edit recipe.
       </p>
 
       <ul data-role='listview'
@@ -46,7 +46,7 @@
         id="recipeList"></ul>
 
         <!-- edit/delete recipe pop up -->
-        <div id='editRecipe' data-role='popup' class='ui-content' class='ui-corner-all'>
+        <div id='editRecipe' data-role='popup' data-theme='b' class='ui-content' class='ui-corner-all'>
           <form>
             <h3>Edit Recipe</h3>
             <!-- recipe name -->
@@ -102,6 +102,16 @@
           <!-- add recipe notes -->
           <label for="addLink">Recipe Link:</label>
           <input type="text" id="addLink" data-theme='a' name="addLink" value="">
+          <!-- mark as favourite -->
+          <div class="marginBox">
+            <label for="addFav" class="chkLabel">Mark as a Favourite</label>
+            <input type="checkbox" id="addFav" data-theme='b' name="addFav" value="">
+          </div>
+
+
+          <!-- <label for="favCheck">Mark As Favourite:</label>
+          <input type="checkbox" name="favCheck" id="favChk" value=""> -->
+
           <!-- button -->
           <button id="submitNew" name="submitNew">Add Recipe</button>
         </form>
@@ -303,12 +313,23 @@
       //place action on form -> when submit
       $('#submitNew').on('click', newRecipe);
 
+
       function newRecipe(evt){
         // console.log("working");
         //abort any active requests
         if(request){
           request.abort();
         }
+
+        var favVal;
+        if( $('#addFav').prop('checked')==true ){
+          // console.log("it's  fav!");
+          favVal=1;
+        }else{
+          // console.log("it's not a fav");
+          favVal=0;
+        }
+
         // define values of form/inputs
         var $form = $(this);
         $.ajax({
@@ -317,7 +338,8 @@
           data: {
             //put variables here for json
             name: $("#addName").val(),
-            link: $("#addLink").val()
+            link: $("#addLink").val(),
+            fav: favVal
           },
           datatype: 'json',
           success: function(jsonStr){
