@@ -11,17 +11,20 @@
   /*min-height: auto;*/
 }
 
-/*body{
-  background-color: none;
-  background: url(_imgaes/producepattern-full.jpg);
-	background-repeat:no-repeat;
-	background-position:center center;
-	background-attachment:scroll;
-	background-size: contain;
-}*/
+.intro{
+  margin: 15px 5%;
+}
+
+.ui-filterable{
+  margin: 15px 5%;
+}
 
 form{
-  margin: 30px;
+  margin: 5%;
+}
+
+form.addNew{
+  margin: 30px 5%;
 }
 
 #submitNew, #backBtn{
@@ -30,7 +33,8 @@ form{
 }
 
 .ui-popup-container{
-  min-width: 500px;
+  min-width: 380px;
+  /*width: 30%;*/
 }
 
  .ui-checkbox{
@@ -63,7 +67,19 @@ form{
    color: white;
 }
 
-
 .ui-page-theme-a{
   background: none;
+}
+
+@media (max-width: 420px){
+  label.chkLabel{
+    display: block;
+  }
+  #addFav{
+    margin-top: -30px;
+  }
+  .ui-popup-container{
+    width: 90%;
+    min-width: 100px;
+  }
 }
